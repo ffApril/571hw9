@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">androidapp</string>
+    <string-array name="spinner_items">
+        <item>All</item>
+        <item>Music</item>
+        <item>Sports</item>
+        <item>Arts &amp; Theatre</item>
+        <item>Film</item>
+        <item>Miscellaneous</item>
+    </string-array>
+
 </resources>
