@@ -63,10 +63,12 @@
             android:textColor="@color/green"
             android:layout_marginBottom="10dp"/>
         <EditText
+            android:id="@+id/keyword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter the keyword"
             android:textColorHint="@color/b_gray"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:background="@drawable/text_border"
             android:layout_marginBottom="10dp"/>
@@ -79,11 +81,12 @@
             android:textColor="@color/green"
             android:layout_marginBottom="10dp"/>
         <EditText
+            android:id="@+id/distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="10"
+
             android:inputType="number"
-            android:textColorHint="@color/b_gray"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:background="@drawable/text_border"
             android:layout_marginBottom="10dp"/>
@@ -123,7 +126,7 @@
             android:layout_marginBottom="10dp"/>
 
         <Switch
-            android:id="@+id/my_switch"
+            android:id="@+id/auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -131,10 +134,12 @@
 
     </LinearLayout>
         <EditText
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter the keyword"
             android:textColorHint="@color/b_gray"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:background="@drawable/text_border"
             android:layout_marginBottom="10dp"/>
@@ -146,6 +151,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_search"
                 android:layout_width="0dp"
                 android:layout_weight="0.45"
                 android:layout_height="wrap_content"
@@ -154,6 +160,7 @@
                 android:textColor="@color/white"
                 android:textSize="20dp"/>
             <Button
+                android:id="@+id/btn_clear"
                 android:layout_width="0dp"
                 android:layout_weight="0.45"
                 android:layout_height="wrap_content"
