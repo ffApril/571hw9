@@ -3,13 +3,36 @@ package com.example.androidapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.Switch;
+
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,11 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn_clear = findViewById(R.id.btn_clear);
         Button btn_search = findViewById(R.id.btn_search);
-        EditText keyword = findViewById(R.id.keyword);
+        AutoCompleteTextView keyword = findViewById(R.id.keyword);
         EditText distance = findViewById(R.id.distance);
         EditText location = findViewById(R.id.location);
         Switch auto = findViewById(R.id.auto);
         distance.setText("10");
+        ArrayAdapter<String> keyword_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+        keyword.setAdapter(keyword_adapter);
+
+
         btn_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,9 +78,66 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 在这里执行你想要实现的逻辑
                 // ...
-                String text = keyword.getText().toString().trim();
-                if (TextUtils.isEmpty(text)) {
-                    keyword.setError("This field cannot be empty.");
+                String keytext = keyword.getText().toString().trim();
+                String loctext = location.getText().toString().trim();
+                if (TextUtils.isEmpty(keytext)) {
+                    Snackbar.make(keyword, "Please fill all fields", Snackbar.LENGTH_SHORT).show();
+                }
+                else if(TextUtils.isEmpty(loctext) && !auto.isChecked()){
+                       Snackbar.make(location, "Please fill all fields", Snackbar.LENGTH_SHORT).show();
+                }
+                else {
+                    if (auto.isChecked()) {
+                        String url = "https://ipinfo.io/json?token=3c5f05564839d1";
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                response -> {
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        String loc = jsonResponse.getString("loc");
+                                        String[] latLng = loc.split(",");
+                                        String lat = latLng[0];
+                                        String lng = latLng[1];
+                                        Log.d("lat", lat);
+                                        Log.d("lng", lng);
+                                        // 在这里添加你希望执行的代码
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }, error -> {
+                            // 处理错误
+                        }
+                        );
+                        Volley.newRequestQueue(MainActivity.this).add(stringRequest);
+                    }
+                    else {
+                        String locationv = location.getText().toString();
+                        locationv = locationv.replaceAll(" ","+");
+                        locationv = locationv.replaceAll(",","+");
+
+                        String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + locationv + "&key=AIzaSyC5rzO2n0yCE-k8V32GXk2gnRqma1uxUrQ";
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject jsonResponse = new JSONObject(response);
+                                            double lat = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optDouble("lat", 0.0);
+                                            double lng = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optDouble("lng", 0.0);
+                                            Log.d("lat", String.valueOf(lat));
+                                            Log.d("lng", String.valueOf(lng));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // 处理错误
+                            }
+                        });
+                        Volley.newRequestQueue(MainActivity.this).add(stringRequest);
+
+                    }
 
                 }
 
@@ -61,6 +145,66 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+       
+
+        keyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String keywordstr = charSequence.toString();
+                if (keywordstr.length() >= 1) { // 只在输入文本长度大于等于1时才发送搜索请求
+                    search(keywordstr, keyword_adapter);
+                    Log.d("OLD", "done");
+
+                }
+                else {
+                    keyword_adapter.clear();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
+
+
+
+    }
+
+//    private void search(String keyword, ArrayAdapter<CharSequence> adapter) {
+//    }
+    private void search(String keywordstr, ArrayAdapter<String> adapter) {
+        Log.d("NEW", "start");
+        String url = "https://myfirstnodejs-379900.wl.r.appspot.com/search?searchText=" + keywordstr;
+//        String url = "http://10.0.2.2:3000/search?searchText=" + keywordstr;
+//        String url = "http://10.0.2.2:3000/search";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    // 处理响应
+//                    Log.d("data", response.toString());
+                    Log.d("TAG", "over");
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        ArrayList<String> keywords = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            String item = jsonArray.getString(i);
+                            keywords.add(item);
+                        }
+                        Log.d("keywords", String.valueOf(keywords));
+                        adapter.clear();
+                        adapter.addAll(keywords);
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    // 处理错误
+                });
+
+
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
 
