@@ -20,6 +20,8 @@ import android.widget.Switch;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +37,8 @@ import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
+    String lat;
+    String lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                        Snackbar.make(location, "Please fill all fields", Snackbar.LENGTH_SHORT).show();
                 }
                 else {
+
                     if (auto.isChecked()) {
                         String url = "https://ipinfo.io/json?token=3c5f05564839d1";
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -95,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
                                         JSONObject jsonResponse = new JSONObject(response);
                                         String loc = jsonResponse.getString("loc");
                                         String[] latLng = loc.split(",");
-                                        String lat = latLng[0];
-                                        String lng = latLng[1];
+                                        lat = latLng[0];
+                                        lng = latLng[1];
                                         Log.d("lat", lat);
                                         Log.d("lng", lng);
                                         // 在这里添加你希望执行的代码
@@ -111,8 +116,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else {
                         String locationv = location.getText().toString();
-                        locationv = locationv.replaceAll(" ","+");
-                        locationv = locationv.replaceAll(",","+");
+                        locationv = locationv.replaceAll(" ", "+");
+                        locationv = locationv.replaceAll(",", "+");
 
                         String url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + locationv + "&key=AIzaSyC5rzO2n0yCE-k8V32GXk2gnRqma1uxUrQ";
                         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -121,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jsonResponse = new JSONObject(response);
-                                            double lat = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optDouble("lat", 0.0);
-                                            double lng = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optDouble("lng", 0.0);
+                                            lat = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optString("lat", "");
+                                            lng = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optString("lng", "");
                                             Log.d("lat", String.valueOf(lat));
                                             Log.d("lng", String.valueOf(lng));
                                         } catch (JSONException e) {
@@ -138,8 +143,52 @@ public class MainActivity extends AppCompatActivity {
                         Volley.newRequestQueue(MainActivity.this).add(stringRequest);
 
                     }
-
                 }
+
+
+                    JSONObject jsondata = new JSONObject();
+                    try {
+                        jsondata.put("tkeyword", keyword.getText().toString());
+                        jsondata.put("tdistance", distance.getText().toString());
+                        jsondata.put("tcategory", spinner.getSelectedItem().toString());
+                        jsondata.put("tlat", lat);
+                        jsondata.put("tlng", lng);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (lat == "" || lng == "") {
+
+                    } else {
+                        String url = null;
+                        try {
+                            Log.d("jsonobject", String.valueOf(jsondata));
+                            url = "https://myfirstnodejs-379900.wl.r.appspot.com/data?jsondata=" + URLEncoder.encode(jsondata.toString(), "UTF-8");
+                            Log.d("url", url);
+                        } catch (UnsupportedEncodingException e) {
+                            throw new RuntimeException(e);
+                        }
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                response -> {
+                                    try {
+                                        JSONObject jsonResponse = new JSONObject(response);
+                                        Log.d("jsondata", String.valueOf(jsonResponse));
+//                                        creatable(jsonResponse);
+                                        //tableflag = true;
+                                        //creattable(jsonResponse);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                },
+                                error -> {
+                                    // 处理错误
+                                }
+                        );
+                        Volley.newRequestQueue(MainActivity.this).add(stringRequest);
+
+                    }
+
+
+
 
 
             }
