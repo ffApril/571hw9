@@ -1,74 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/b_gray"
-    tools:context=".MainActivity">
+    tools:context=".formfrg">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="39dp"
-        android:background="@color/grey"
-        android:text="EventFinder"
-        android:textColor="@color/green"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-<!--    navbar-->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="40dp"-->
-<!--        android:orientation="horizontal">-->
-<!--        -->
-<!--        <TextView-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_weight="0.5"-->
-<!--            android:text="SEARCH"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:gravity="center"-->
-<!--            android:background="@color/black"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:layout_weight="0.5"-->
-<!--            android:text="FAVORITES"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:gravity="center"-->
-<!--            android:background="@color/black"/>-->
-<!--    </LinearLayout>-->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/orange"
-        app:title="Animals"
-        app:titleTextColor="@color/white" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/orange"
-        app:tabIconTint="@color/grey"
-        app:tabIndicatorColor="@color/white"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/grey" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-<!--    form-->
+    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -126,37 +63,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-           />
+            />
 
-<!--        location-->
+        <!--        location-->
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location*"
-            android:textSize="20dp"
-            android:textColor="@color/green"
-            android:layout_marginBottom="10dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Auto-Detect"
-            android:textSize="15dp"
-            android:textColor="@color/b_gray"
-            android:layout_marginBottom="10dp"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:text="Location*"
+                android:textSize="20dp"
+                android:textColor="@color/green"
+                android:layout_marginBottom="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Auto-Detect"
+                android:textSize="15dp"
+                android:textColor="@color/b_gray"
+                android:layout_marginBottom="10dp"/>
 
-        <Switch
-            android:id="@+id/auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <Switch
+                android:id="@+id/auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
 
-    </LinearLayout>
+        </LinearLayout>
         <EditText
             android:id="@+id/location"
             android:layout_width="match_parent"
@@ -168,7 +105,7 @@
             android:background="@drawable/text_border"
             android:layout_marginBottom="10dp"/>
 
-<!--        button-->
+        <!--        button-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -198,7 +135,4 @@
         </LinearLayout>
     </LinearLayout>
 
-
-
-
-</LinearLayout>
+</FrameLayout>

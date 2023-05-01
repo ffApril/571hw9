@@ -104,7 +104,49 @@ public class MainActivity extends AppCompatActivity {
                                         lng = latLng[1];
                                         Log.d("lat", lat);
                                         Log.d("lng", lng);
-                                        // 在这里添加你希望执行的代码
+                                        JSONObject jsondata = new JSONObject();
+                                        try {
+                                            jsondata.put("tkeyword", keyword.getText().toString());
+                                            jsondata.put("tdistance", distance.getText().toString());
+                                            jsondata.put("tcategory", spinner.getSelectedItem().toString());
+                                            jsondata.put("tlat", lat);
+                                            jsondata.put("tlng", lng);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if (lat == "" || lng == "") {
+
+                                        } else {
+                                            String url2 = null;
+                                            try {
+                                                Log.d("jsonobject", String.valueOf(jsondata));
+                                                url2 = "https://myfirstnodejs-379900.wl.r.appspot.com/data?jsondata=" + URLEncoder.encode(jsondata.toString(), "UTF-8");
+                                                Log.d("url", url2);
+                                            } catch (UnsupportedEncodingException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                            StringRequest stringRequest2 = new StringRequest(Request.Method.GET, url2,
+                                                    response2 -> {
+                                                        try {
+                                                            Log.d("jsondatastr", response2);
+                                                            JSONObject jsonResponse2 = new JSONObject(response2);
+                                                            Log.d("jsondata", String.valueOf(jsonResponse2));
+//                                        creatable(jsonResponse);
+                                                            //tableflag = true;
+                                                            //creattable(jsonResponse);
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    },
+                                                    error -> {
+                                                        // 处理错误
+                                                    }
+                                            );
+                                            Volley.newRequestQueue(MainActivity.this).add(stringRequest2);
+
+                                        }
+
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -130,6 +172,47 @@ public class MainActivity extends AppCompatActivity {
                                             lng = jsonResponse.optJSONArray("results").optJSONObject(0).optJSONObject("geometry").optJSONObject("location").optString("lng", "");
                                             Log.d("lat", String.valueOf(lat));
                                             Log.d("lng", String.valueOf(lng));
+                                            JSONObject jsondata = new JSONObject();
+                                            try {
+                                                jsondata.put("tkeyword", keyword.getText().toString());
+                                                jsondata.put("tdistance", distance.getText().toString());
+                                                jsondata.put("tcategory", spinner.getSelectedItem().toString());
+                                                jsondata.put("tlat", lat);
+                                                jsondata.put("tlng", lng);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            if (lat == "" || lng == "") {
+
+                                            } else {
+                                                String url2 = null;
+                                                try {
+                                                    Log.d("jsonobject", String.valueOf(jsondata));
+                                                    url2 = "https://myfirstnodejs-379900.wl.r.appspot.com/data?jsondata=" + URLEncoder.encode(jsondata.toString(), "UTF-8");
+                                                    Log.d("url", url2);
+                                                } catch (UnsupportedEncodingException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                                StringRequest stringRequest2 = new StringRequest(Request.Method.GET, url2,
+                                                        response2 -> {
+                                                            try {
+                                                                Log.d("jsondatastr", response2);
+                                                                JSONObject jsonResponse2 = new JSONObject(response2);
+                                                                Log.d("jsondata", String.valueOf(jsonResponse2));
+//                                        creatable(jsonResponse);
+                                                                //tableflag = true;
+                                                                //creattable(jsonResponse);
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        },
+                                                        error -> {
+                                                            // 处理错误
+                                                        }
+                                                );
+                                                Volley.newRequestQueue(MainActivity.this).add(stringRequest2);
+
+                                            }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -146,51 +229,24 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-                    JSONObject jsondata = new JSONObject();
-                    try {
-                        jsondata.put("tkeyword", keyword.getText().toString());
-                        jsondata.put("tdistance", distance.getText().toString());
-                        jsondata.put("tcategory", spinner.getSelectedItem().toString());
-                        jsondata.put("tlat", lat);
-                        jsondata.put("tlng", lng);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if (lat == "" || lng == "") {
-
-                    } else {
-                        String url = null;
-                        try {
-                            Log.d("jsonobject", String.valueOf(jsondata));
-                            url = "https://myfirstnodejs-379900.wl.r.appspot.com/data?jsondata=" + URLEncoder.encode(jsondata.toString(), "UTF-8");
-                            Log.d("url", url);
-                        } catch (UnsupportedEncodingException e) {
-                            throw new RuntimeException(e);
-                        }
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                                response -> {
-                                    try {
-                                        JSONObject jsonResponse = new JSONObject(response);
-                                        Log.d("jsondata", String.valueOf(jsonResponse));
-//                                        creatable(jsonResponse);
-                                        //tableflag = true;
-                                        //creattable(jsonResponse);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                },
-                                error -> {
-                                    // 处理错误
-                                }
-                        );
-                        Volley.newRequestQueue(MainActivity.this).add(stringRequest);
-
-                    }
 
 
 
 
+            }
+        });
 
+        auto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Switch 选中
+                    location.setText("");
+                    location.setEnabled(false);
+                } else {
+                    // Switch 没有选中
+                    location.setEnabled(true);
+                }
             }
         });
 
